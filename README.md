@@ -14,7 +14,7 @@
 
 ## Deployment
 ```
-docker-compose up
+docker build -t 1.0.0 . && docker run -p 80:80 -p 443:443 -v `pwd`:/www/ --name test-task-nginx-start 1.0.0
 ```
 
 ## Installation

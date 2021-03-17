@@ -1,8 +1,9 @@
-FROM node:14.15.4-alpine
-RUN npm install pm2 -g
-WORKDIR /usr/app
-COPY . .
-RUN yarn install --pure-lockfile --non-interactive
-EXPOSE 3000
-RUN yarn build
-CMD [ "pm2-runtime", "start", "npm", "--", "start" ]
+FROM alpine:latest
+RUN apk add --update nginx && rm -rf /var/cache/apk/*
+COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY config/vhost.conf /etc/nginx/conf.d/vhost.conf
+RUN ln -svf /dev/stdout /var/log/nginx/access.log \
+  && ln -svf /dev/stderr /var/log/nginx/error.log
+EXPOSE 80 443
+
+CMD [ "nginx", "-g", "daemon off;"]
